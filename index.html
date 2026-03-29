@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriConnect - Farmer to Market Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#228B22', // Forest Green for agriculture theme
+                        secondary: '#FFD700', // Gold for accents
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth scrolling behavior for the whole page */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar link hover and active states */
+        nav a {
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+        }
+
+        nav a:hover {
+            color: #FFD700 !important;
+            /* gold on hover */
+            transform: translateY(-2px);
+        }
+
+        nav a.active {
+            color: #FFD700 !important;
+            font-weight: 600;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #FFD700;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after,
+        nav a.active::after {
+            width: 100%;
+        }
+
+        /* Card hover effect (for dashboard cards, produce cards, etc.) */
+        .card-hover {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Button press / hover effect */
+        .btn-press {
+            transition: all 0.2s ease;
+            transform: scale(1);
+        }
+
+        .btn-press:active {
+            transform: scale(0.96);
+        }
+
+        .btn-press:hover {
+            box-shadow: 0 8px 20px rgba(34, 139, 34, 0.3);
+            /* green shadow */
+        }
+    /* ───────────────────────────────────────────────
+     Scroll Reveal / Fade-in on scroll
+  ──────────────────────────────────────────────── */
+
+  /* Default state: elements start hidden / slightly moved */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* smooth ease-out curve — feels natural */
+  }
+
+  /* When visible → come into place */
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Optional: different directions / delays for variety */
+
+  /* From left */
+  .reveal-from-left {
+    transform: translateX(-80px);
+  }
+
+  .reveal-from-left.active {
+    transform: translateX(0);
+  }
+
+  /* From right */
+  .reveal-from-right {
+    transform: translateX(80px);
+  }
+
+  .reveal-from-right.active {
+    transform: translateX(0);
+  }
+
+  /* Scale + fade (great for hero / big sections) */
+  .reveal-scale {
+    transform: scale(0.92);
+  }
+
+  .reveal-scale.active {
+    transform: scale(1);
+  }
+
+  /* Stagger children (cards inside a grid) */
+  .reveal-parent > * {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s ease-out;
+  }
+
+  .reveal-parent.active > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Delay each child a bit more */
+  .reveal-parent.active > *:nth-child(1) { transition-delay: 0.1s; }
+  .reveal-parent.active > *:nth-child(2) { transition-delay: 0.2s; }
+  .reveal-parent.active > *:nth-child(3) { transition-delay: 0.3s; }
+  .reveal-parent.active > *:nth-child(4) { transition-delay: 0.4s; }
+  .reveal-parent.active > *:nth-child(5) { transition-delay: 0.5s; }
+
+  /* Optional: slower for bigger sections like hero */
+  #home.reveal {
+    transition-duration: 1.2s;
+  }
+
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+<div class="cursor"></div>
+    <!-- Navigation Bar -->
+   
+    <nav class="bg-primary text-white p-4 fixed w-full top-0 z-10 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">AgriConnect</h1>
+            <ul class="flex space-x-6">
+                <li><a href="#home" class="hover:underline">Home</a></li>
+                <li><a href="#dashboard" class="hover:underline">Dashboard</a></li>
+                <li><a href="#list-produce" class="hover:underline">List Produce</a></li>
+                <li><a href="#market-prices" class="hover:underline">Market Prices</a></li>
+                <li><a href="#weather" class="hover:underline">Weather</a></li>
+                <li><a href="#pest-advice" class="hover:underline">Pest Advice</a></li>
+                <li><a href="#loans" class="hover:underline">Loans</a></li>
+                <li><a href="#buyers" class="hover:underline">Buyers</a></li>
+                <li><button onclick="toggleLoginModal()" onclick="scrollToSection('dashboard')"
+                        class="hover:underline  
+        bg-secondary text-primary px-6 py-3 hover:bg-white hover:text-green-700 rounded hover:transition btn-press">Login/Signup</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-20 p-4 ">
+
+        <!-- Home Section -->
+        <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center bg-center bg-cover reveal reveal-scale"
+            style="background-image: url('tractorAgricBG1.jpg')">
+            <h2 class="text-4xl font-bold mb-4 text-white">Welcome to AgriConnect</h2>
+            <p class="text-lg mb-8 text-white font-semibold">Connecting Nigerian farmers with buyers, providing
+                real-time market info, weather forecasts, pest advice, and loan resources to reduce post-harvest losses
+                and boost income.</p>
+            <button onclick="scrollToSection('dashboard')"
+                class="bg-secondary text-primary px-6 py-3 rounded hover:underline hover:bg-green-700 rounded hover:bg-white hover:text-green-700 hover:underline  transition btn-press transition btn-press ">Get
+                Started</button>
+        </section>
+
+        <!-- Farmer Dashboard -->
+        <section id="dashboard" class="min-h-screen py-10 bg-center bg-cover rounded shadow card-hover reveal-parent" 
+            style="background-image: url('rigginagricbg2.jpg')">
+            <h2 class="text-3xl font-bold mb-6 ps-5">Farmer Dashboard</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded shadow hover:shadow-lg transition">
+                    <h3 class="text-xl font-semibold">Your Listings</h3>
+                    <p>View and manage your produce listings.</p>
+                </div>
+                <div class="bg-white p-6 rounded shadow hover:shadow-lg transition">
+                    <h3 class="text-xl font-semibold">Connections</h3>
+                    <p>See interested buyers and exporters.</p>
+                </div>
+                <div class="bg-white p-6 rounded shadow hover:shadow-lg transition">
+                    <h3 class="text-xl font-semibold">Analytics</h3>
+                    <p>Track sales and market trends.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- List Produce -->
+        <section id="list-produce" class="min-h-screen py-5 rounded shadow card-hover reveal">
+            <h2 class="text-3xl font-bold mb-6 ps-10">List Your Produce</h2>
+            <form class="bg-white p-6 rounded shadow">
+                <label class="block mb-2">Produce Name</label>
+                <input type="text" class="w-full p-2 border rounded mb-4">
+                <label class="block mb-2">Quantity (kg)</label>
+                <input type="number" class="w-full p-2 border rounded mb-4">
+                <label class="block mb-2">Price per kg (NGN)</label>
+                <input type="number" class="w-full p-2 border rounded mb-4">
+                <label class="block mb-2">Location</label>
+                <input type="text" class="w-full p-2 border rounded mb-4">
+                <button type="submit"
+                    class="bg-primary text-white px-4 py-2 rounded hover:bg-green-700 rounded hover:underline hover:bg-yellow-400 transition btn-press transition hover:text-green-700">Submit
+                    Listing</button>
+            </form>
+        </section>
+
+        <!-- Market Prices -->
+        <section id="market-prices" class=" py-10 bg-gray-300 rounded shadow card-hover reveal-parent">
+            <h2 class="text-3xl font-bold mb-6 ps-5">Real-Time Market Prices</h2>
+            <div id="prices" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Prices will be loaded via JS -->
+            </div>
+        </section>
+
+        <!-- Weather Forecasts -->
+        <section id="weather" class=" mb-16 mt-16 py-10 bg-gray-300 rounded shadow card-hover reveal">
+
+            <h2 class="text-3xl font-bold mb-6 ps-5">Weather Forecasts</h2>
+            <div id="weather-info" class="bg-white p-6 rounded shadow">
+                <p>Enter your location to get forecast.</p>
+                <input type="text" id="location" class="p-2 border rounded mb-4" placeholder="e.g., Lagos">
+                <button onclick="getWeather()"
+                    class="bg-primary text-white px-4 py-2 rounded hover:bg-green-700 transition  hover:underline hover:bg-yellow-400 transition btn-press transition hover:text-green-700">Get
+                    Forecast</button>
+                <div id="forecast" class="mt-4"></div>
+            </div>
+        </section>
+
+        <!-- Pest Advice -->
+        <section id="pest-advice" class=" py-10 bg-gray-300 rounded shadow card-hover">
+
+            <h2 class="text-3xl font-bold mb-6 ps-5">Pest Advice</h2>
+            <div class="accordion">
+                <div class="bg-white mb-2 rounded shadow">
+                    <button onclick="toggleAccordion(this)" class="w-full p-4 text-left font-semibold transition  hover:underline hover:bg-yellow-400 transition btn-press transition hover:text-green-700">Common Pests in
+                        Nigeria</button>
+                    <div class="hidden p-4">Details on armyworms, aphids, etc.</div>
+                </div>
+                <div class="bg-white mb-2 rounded shadow">
+                    <button onclick="toggleAccordion(this)" class="w-full p-4 text-left font-semibold transition  hover:underline hover:bg-yellow-400 transition btn-press transition hover:text-green-700">Prevention
+                        Tips</button>
+                    <div class="hidden p-4">Use natural repellents, crop rotation.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loan Resources -->
+        <section id="loans" class="min-h-screen py-10  bg-center bg-cover rounded shadow card-hover reveal"
+            style="background-image: url('agricbg5.1.jpg')">
+            <h2 class="text-3xl font-bold mb-6 ps-5">Loan Resources</h2>
+            <div class="bg-white p-6 rounded shadow">
+                <p>Access information on agricultural loans from banks and government schemes.</p>
+                <ul class="list-disc pl-6">
+                    <li>Central Bank of Nigeria Anchor Borrowers' Programme</li>
+                    <li>Bank of Agriculture Loans</li>
+                </ul> 
+                <button
+                    class="bg-primary text-white px-4 py-2 rounded mt-4 hover:bg-green-700 transition  hover:underline hover:bg-yellow-400 hover:text-green-700 btn-press transition">Apply
+                    Now</button>
+            </div>
+        </section>
+
+        <!-- Buyers Section -->
+        <section id="buyers" class="bg-gray-300 py-10 rounded shadow card-hover reveal-parent">
+            <h2 class=" ps-5 text-3xl font-bold mb-6">For Buyers</h2>
+            <div class="bg-white p-6 rounded shadow">
+                <p>Search for produce, connect with farmers.</p>
+                <input type="text" class="w-full p-2 border rounded mb-4" placeholder="Search produce...">
+                <div id="search-results" class="mt-4"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center ">
+        <div class="bg-white p-8 rounded shadow-lg">
+            <h2 class="text-2xl mb-4">Login / Signup</h2>
+            <input type="email" placeholder="Email" class="w-full p-2 border rounded mb-4">
+            <input type="password" placeholder="Password" class="w-full p-2 border rounded mb-4">
+            <button class="bg-primary text-white px-4 py-2 rounded w-full hover:bg-green-700 transition transition  hover:underline hover:bg-yellow-400 transition btn-press transition hover:text-green-700">Submit</button>
+            <button onclick="toggleLoginModal()" class="mt-2 text-gray-600 hover:text-green-700  ">Close</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        function scrollToSection(id) {
+            document.querySelector(`#${id}`).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Toggle Login Modal
+        function toggleLoginModal() {
+            document.getElementById('login-modal').classList.toggle('hidden');
+        }
+
+        // Accordion
+        function toggleAccordion(button) {
+            const content = button.nextElementSibling;
+            content.classList.toggle('hidden');
+        }
+
+        // Mock Market Prices
+        const pricesData = [
+            { produce: 'Yam', price: '500 NGN/kg' },
+            { produce: 'Cassava', price: '300 NGN/kg' },
+            // Add more
+        ];
+        const pricesContainer = document.getElementById('prices');
+        pricesData.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'bg-white p-4 rounded shadow';
+            div.innerHTML = `<h3 class="font-semibold">${item.produce}</h3><p>${item.price}</p>`;
+            pricesContainer.appendChild(div);
+        });
+
+        // Weather API (Replace with your OpenWeatherMap API key)
+        async function getWeather() {
+            const location = document.getElementById('location').value || 'Lagos';
+            const apiKey = 'YOUR_API_KEY_HERE'; // User to replace
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                document.getElementById('forecast').innerHTML = `
+                    <p>Temperature: ${data.main.temp}°C</p>
+                    <p>Condition: ${data.weather[0].description}</p>
+                `;
+            } catch (error) {
+                document.getElementById('forecast').innerHTML = '<p>Error fetching weather.</p>';
+            }
+        }
+
+        // Mock Search Results for Buyers
+        const searchInput = document.querySelector('#buyers input');
+        searchInput.addEventListener('input', () => {
+            // Mock search
+            document.getElementById('search-results').innerHTML = '<p>Results for: ' + searchInput.value + '</p>';
+        });
+
+        // Note: For real functionality, integrate backend APIs.
+        // === Highlight active nav link on scroll ===
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100; // offset for fixed navbar
+                if (scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+  
+// ───────────────────────────────────────────────
+//   Scroll Reveal using Intersection Observer
+// ───────────────────────────────────────────────
+
+const revealElements = document.querySelectorAll('.reveal, .reveal-from-left, .reveal-from-right, .reveal-scale, .reveal-parent');
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+      // Optional: stop observing after it appeared once
+      // revealObserver.unobserve(entry.target);
+    }
+    // else { entry.target.classList.remove('active'); } ← uncomment if you want re-trigger
+  });
+}, {
+  threshold: 0.15,          // 15% visible → start animation
+  rootMargin: "0px 0px -60px 0px"  // start a bit earlier
+});
+
+revealElements.forEach(el => {
+  revealObserver.observe(el);
+});
+        // Optional: close mobile menu after click (if you add mobile menu later)
+    </script>
+
+</body>
+
+</html>
